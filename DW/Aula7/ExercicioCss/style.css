@@ -1,0 +1,72 @@
+.L
+{
+    background-color: #fff;
+}
+
+.N
+{
+    font-weight: bold;
+}
+
+td
+
+{
+    width: 90pt;
+    height: 30pt;
+    border: 1px solid #00f;
+}
+
+.TL
+{
+    text-align: left;
+}
+
+.TC
+{
+    text-align: center;
+}
+
+.TR
+{
+    text-align: right;
+}
+
+.VT
+{
+    vertical-align: top;
+}
+
+.VM
+{
+    vertical-align: middle;
+}
+
+.VB
+{
+    vertical-align: bottom;
+}
+
+body
+{
+    background-color: #000;
+    padding: 0px;
+    margin: 0px;
+    font: normal 10pt sans-serif;
+    color: #fff;
+}
+
+.table1
+{
+    border-collapse: collapse;
+    background-color: #999;
+    color: #000;
+}
+
+.table2
+{
+    border-collapse: separate;
+    background-color: #999;
+    color: #000;
+    border-spacing: 4pt;
+    border: 1px solid #f00;
+}

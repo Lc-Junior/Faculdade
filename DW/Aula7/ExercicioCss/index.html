@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css" media="all">
+    <title>Exercício CSS</title>
+</head>
+<body>
+    <p>Uma tabela simples onde cada linha tem 90pt de largura e 30pt de altura(utiliza fonte 10pt)</p>
+    <table class="table1">
+        <tr><td class="TL VT">L1 C1</td>
+        <td class="TC VT">L1 C2</td><td class="TR VT">L1 C3</td></tr>
+        <tr class="L N"><td class="TL VM">L2 C1</td><td class="TC VM">L2 C2</td>
+        <td class="TR VM">L2 C3</td></tr>
+        <tr><td class="TL VB">L3 C1</td><td class="TC VB" >L3 C2</td>
+        <td class="TR VB">L3 C3</td></tr>
+    </table>
+    <p>Parecida com a tablea acima, mas com duas diferenças:
+        espaçamento de 4pt entre cada célula e uma borda externa...</p>
+    <table class="table2">
+        <tr><td class="TL VT">L1 C1</td><td class="TC VT">L1 C2</td>
+            <td class="TR VT">L1 C3</td></tr>
+        <tr class="L N"><td class="TL VM">L2 C1</td>
+            <td class="TC VM">L2 C2</td><td class="TR VM">L2 C3</td></tr>
+        <tr><td class="TL VB">L3 C1</td><td class="TC VB">L3 C2</td>
+            <td class="TR VB">L3 C3</td></tr>
+    </table>
+    <p>*Dica: dê uma olhada nas propriedades border-collapse, border-spacing e vertical-align...</p>
+</body>
+</html>

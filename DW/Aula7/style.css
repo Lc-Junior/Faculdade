@@ -1,0 +1,17 @@
+/*Folha de estilo: style.css */
+h1
+{
+    color: blue;
+    background-color: orange;
+}
+
+h2
+{
+    color: red;
+}
+
+p
+{
+    color: rgb(0, 255, 0);
+    font-size: 12px;
+}
