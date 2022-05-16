@@ -12,5 +12,4 @@ print(f'O valor de {n} * 8  = {n*8}')
 print(f'O valor de {n} * 9  = {n*9}')
 print(f'O valor de {n} * 10 = {n*10}')
 print('============================')
-https://github.com/Lc-Junior/AulasCeV/invitations
   
