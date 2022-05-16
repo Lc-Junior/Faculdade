@@ -1,0 +1,83 @@
+.redbox{
+    background-color: red;
+    color: rgb(255, 255, 255);
+    width: 100%;
+    height: 150px;
+}
+.ped{
+    font-size: 14px;
+    position: relative;
+    top: -30px;
+    right: -110px;
+}
+.duv{
+    font-size: 14px;
+    position: relative;
+    top: -30px;
+    right: -140px;
+}
+.atend{
+    font-size: 14px;
+    position: relative;
+    top: -30px;
+    right: -170px;
+}
+.ret{
+    font-size: 14px;
+    position: relative;
+    top: -30px;
+    right: -200px;
+}
+.lojas{
+    font-size: 14px;
+    position: relative;
+    top: -30px;
+    right: -230px;
+}
+.tele{
+    font-size: 14px;
+    position: relative;
+    top: -30px;
+    right: -260px;
+}
+.foto{
+    position: relative;
+    top: 50px;
+    right: 370px;
+    
+}
+#busca{
+    position: relative;
+    padding: 14px;
+    top: -48px;
+    right: -320px;
+    border-radius: 3px;
+    border: 1px;
+    width: 35%;
+}
+#submit{
+    padding: 14px;
+    border: 1px;
+    border-radius: 2px;
+    position: relative;
+    top: -48px;
+    right: -315px;
+    color: white;
+    background-color: rgb(116, 38, 38); 
+}
+.carrinho{
+    position: relative;
+    top: -14px;
+    right: -340px;
+}
+a:link{
+    color: white;
+}
+a:hover{
+    color: yellow;
+}
+.blackbox{
+    background-image: linear-gradient(to right, black, grey);
+    color: white;
+    height: 40px;
+}
