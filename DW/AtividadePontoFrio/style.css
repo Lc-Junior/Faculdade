@@ -1,0 +1,196 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+.topo{
+    height: 34px;
+    width: 100%;
+    background-color: #e4ba37;
+    
+}
+
+.topo p{
+    left: 50%;
+    font-size: 20px;
+    color: green;
+    padding: 4px 220px;
+}
+
+.topo span{
+    font-weight: bold;
+    font-size: 23px;
+}
+
+.redbox{
+    height: 130px;
+    background-color: #bc0206;
+    width: 100%;
+
+}
+
+.redbox li{
+    position: relative;
+    left: 160px;
+    display: inline-block;
+    margin: 6px 12px;
+    color: white;
+}
+
+.redbox ul li a{
+    text-decoration: none;
+}
+.login{
+    width: 14%;
+    position: relative;
+    left: 940px;
+    top: -27px;
+}
+
+.login a{
+    text-decoration: none;
+}
+
+form{
+    position: relative;
+    width: 495px;
+    top: -40px;
+    left: 392px;
+}
+
+.logo{
+    position: relative;
+    top: 16px;
+    left: 200px;
+}
+
+#busca{
+    position: relative;
+    border: none;
+    border-radius: 4px;
+    height: 50px;
+    width: 400px;
+    left: 5px;
+    top: 2px;
+    font-size: 22px;
+}
+
+form [type="submit"]{
+    height: 50px;
+    width: 90px;
+    border: none;
+    background-color: #6f0306;
+    color: white;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.carrinho{
+    position: relative;
+    top: -98px;
+    left: 950px;
+}
+
+.blackbox{
+    height: 46px;
+    background-color: black;
+    color: white;
+}
+
+.blackbox li{
+    display: inline-block;
+    margin: -6px 20px;
+}
+
+.blackbox a{
+    text-decoration: none;
+    font-weight: bold;
+    color: rgb(190, 187, 187);
+}
+
+.namorado a{
+    position: relative;
+    top: 10px;
+    color: #ff5245;
+}
+
+.craque a{
+    position: relative;
+    top: 10px;
+    color: #ffb904;
+}
+
+a{
+    color: white;
+}
+
+
+.slider {
+    position: relative;
+    display: block;
+    height: 293px;
+    width: 1280px;
+    margin: auto;
+    margin-top: 20px;
+}
+
+.slider li {
+    list-style: none;
+    position: absolute;
+}
+
+.slider img {
+    margin: auto;
+    height: 100%;
+    width: 100%;
+    vertical-align: top;
+}
+
+.slider input{
+    display: none;
+}
+
+.slider label {
+    position: absolute;
+    border-radius: 50%;
+    background-color: rgb(80, 80, 80);
+    bottom: 10px;
+    cursor: pointer;
+    display: block;
+    height: 20px;
+    width: 20px;
+    z-index: 10;
+}
+
+.slider li:nth-child(1) label {
+    left: 605px;
+    top: 10px;
+}
+
+.slider li:nth-child(2) label {
+    left: 635px;
+    top: 10px;
+}
+
+.slider li:nth-child(3) label {
+    left: 665px;
+    top: 10px;
+}
+
+.slider img {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.slider li input:checked ~ img {
+    opacity: 1;
+    visibility: visible;
+    z-index: 10;
+}
