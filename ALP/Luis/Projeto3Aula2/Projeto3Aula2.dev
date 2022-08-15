@@ -1,6 +1,6 @@
 [Project]
-FileName=Project2Aula1.dev
-Name=Project2Aula1
+FileName=Projeto3Aula2.dev
+Name=Projeto3Aula2
 Type=1
 Ver=2
 ObjFiles=
@@ -61,7 +61,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit2]
-FileName=Untitled7.c
+FileName=..\Projeto4Aula2\Projeto4Aula2.c
 CompileCpp=0
 Folder=
 Compile=1
