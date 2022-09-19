@@ -2,25 +2,21 @@
 #include <stdlib.h>
 #include <locale.h>
 
-//Receba 5 numeros inteiros e mostre como resultado: Qual a soma dos numeros pares
-//Qual foi o maior número impar. no maximo 4 variaveis
+//Receba salário de 5 funcionários e mostre como resultado: Qual o salário reajustado
+//Até 300, 50% ...... >300, 30%
 int main() {
 	setlocale(LC_ALL, "");
 	int cont;
-	int valor;
-	int soma=0;
-	int impar=0;
+	int valor = 1;
+	float salario;
 	for(cont=0; cont<5; cont++){
-		printf("Digite um valor: ");
-		scanf("%d", &valor);
-			if(valor%2==0){
-				soma+=valor;
+		printf("Digite o salário do funcionário %d: ", valor++);
+		scanf("%f", &salario);
+			if(salario <= 300){
+				printf("\n\nO seu salário reajustado é de: %.2f\n\n\n", salario+(salario*0.5));
 			}
-			if(valor%2 != 0 && valor > impar){
-				impar=valor;
+			if(salario > 300){
+				printf("\n\nO seu salário reajustado é de: %.2f\n\n\n", salario+(salario*0.3));
 			}
-	}
-	printf("A soma é: %d\n", soma);
-	printf("O maior valor impar é: %d", impar);
-	
+	}	
 }
