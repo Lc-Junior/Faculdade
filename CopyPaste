@@ -31,3 +31,7 @@ INSERT INTO documentos VALUES (NULL,2 ,'CPF', '345.345.678-00');
 INSERT INTO documentos VALUES (NULL,3 ,'RG', '2.345.678-X');
 
 SELECT * FROM documentos;
+
+SELECT clientes.* FROM clientes WHERE sexoCliente = 'M';
+SELECT clientes.* FROM clientes WHERE status = 'A';
+SELECT clientes.* FROM clientes, documentos WHERE documentos.tipoDocumento = 'RG';
