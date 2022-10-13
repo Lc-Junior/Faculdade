@@ -34,4 +34,8 @@ SELECT * FROM documentos;
 
 SELECT clientes.* FROM clientes WHERE sexoCliente = 'M';
 SELECT clientes.* FROM clientes WHERE status = 'A';
-SELECT clientes.* FROM clientes, documentos WHERE clientes.idCLiente = documentos.idCliente AND documentos.tipoDocumento= 'RG';
+SELECT clientes.*,tipoDocumento, numeroDocumento FROM clientes, documentos WHERE clientes.idCLiente = documentos.idCliente AND documentos.tipoDocumento= 'RG';
+SELECT clientes.idCliente AS IDENTIFICAÇÃO, clientes.nomeCliente AS NOME,
+clientes.sexoCliente AS SEXO, clientes.status AS STATUS,
+documentos.tipoDocumento AS TIPO_DOCUMENTO, documentos.numeroDocumento AS NÚMERO FROM clientes,
+documentos WHERE clientes.idCliente = documentos.idCliente AND documentos.tipoDocumento = 'RG';
