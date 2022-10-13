@@ -19,3 +19,9 @@ CREATE TABLE `documentos`(
     CONSTRAINT `FK_idCliente` FOREIGN KEY (`idCliente`) REFERENCES clientes (`idCliente`)
 )
 ENGINE = InnoDB;
+
+INSERT INTO clientes VALUES (NULL, 'João da Silva', 'M', 'A');
+INSERT INTO clientes VALUES (NULL, 'João da Silva', 'M', 'A');
+INSERT INTO clientes VALUES (NULL, 'João da Silva', 'M', 'A');
+
+SELECT * FROM clientes;
