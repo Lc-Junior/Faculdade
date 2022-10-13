@@ -1,22 +1,21 @@
-CREATE SCHEMA IF NOT EXISTS `ExercicioAula6` default character set utf8;
-USE `ExercicioAula6`;
-CREATE TABLE `ExercicioAula6` . `Estudantes`(
-'nome' VARCHAR(255),
-'email' VARCHAR(255),
-'telefone' VARCHAR(255),
-'altura' DECIMAL(3,2),
-'aprovado' TINYINT(1)
+CREATE SCHEMA IF NOT EXISTS `LojaProjecao` DEFAULT CHARACTER SET utf8;
+USE `LojaProjecao`;
+CREATE TABLE `Clientes`(
+	`idCliente` INT NOT NULL AUTO_INCREMENT,
+	`nomeCliente` VARCHAR(50) NOT NULL,
+    `sexoCliente` CHAR(1) NOT NULL,
+    `status` CHAR(1) NOT NULL,
+    
+    CONSTRAINT `PK_Cliente` PRIMARY KEY (`idCliente`),
+    CONSTRAINT `CH_Cliente` CHECK (`sexoCliente` IN ('F', 'M'))
+);
+CREATE TABLE `documentos`(
+	`idDocumento` INT NOT NULL AUTO_INCREMENT,
+	`idCliente` INT NOT NULL,
+    `tipoDocumento` VARCHAR(25) NOT NULL,
+    `numeroDocumento` VARCHAR(15),
+    
+    CONSTRAINT `PK_Documento` PRIMARY KEY (`idDocumento`),
+    CONSTRAINT `FK_idCliente` FOREIGN KEY (`idCliente`) REFERENCES clientes (`idCliente`)
 )
 ENGINE = InnoDB;
-
-INSERT INTO Estudantes (nome, email, telefone, altura, aprovado)
-		VALUES('João Paulo', 'jpapim@gmail.com', '3345-0909', 1.68, 1);
-INSERT INTO Estudantes (nome, email, telefone, altura, aprovado)
-		VALUES('José Paulo', 'jose@gmail.com', '3345-5555', 1.88, 0);
-INSERT INTO Estudantes (nome, email, telefone, altura, aprovado)
-		VALUES('Maria', 'maria@gmail.com', '3345-8888', 1.98, 1);
-INSERT INTO Estudantes (nome, email, telefone, altura, aprovado)
-		VALUES('Joana', 'joana@gmail.com', '3345-6666', 1.48, 0);
-INSERT INTO Estudantes (nome, email, telefone, altura, aprovado)
-		VALUES('Josefina', 'josefina@gmail.com', '3345-8765', 1.58, 0);
-SELECT * FROM Estudantes;
