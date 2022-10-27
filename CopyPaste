@@ -44,3 +44,5 @@ INSERT INTO `Consumo` VALUES (4, 30, 4, 2019, 4);
 SELECT * FROM `Consumo`;
 
 SELECT COUNT(`matricula`) FROM `UnidadeConsumo`, `TipoTarifa`, `Consumo` WHERE `TipoTarifa`.`idtipotarifa` = `UnidadeConsumo`.`idtipotarifa` AND `Consumo`.`idunidadeconsumo` = `UnidadeConsumo`.`idunidadeconsumo` AND `Consumo`.`ano` = "2019" AND `Consumo`.`mes` = "3" AND `Consumo`.`quantidade` < 40 AND `desctipotarifa` = 'Normal';
+
+hj
