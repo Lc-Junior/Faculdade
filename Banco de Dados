@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS `TipoTarifa`(
 `idtipotarifa` INT NOT NULL,
 `desctipotarifa` VARCHAR(45) NOT NULL,
 PRIMARY KEY(idtipotarifa)
-);
+);;
 CREATE TABLE IF NOT EXISTS `UnidadeConsumo`(
 `idunidadeconsumo` INT NOT NULL,
 `matricula` VARCHAR(11) NOT NULL,
