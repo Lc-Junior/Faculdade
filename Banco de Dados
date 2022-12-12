@@ -1,6 +1,7 @@
 CREATE SCHEMA IF NOT EXISTS `Caesb` DEFAULT CHARACTER SET utf8;
 USE `Caesb`;
 
+
 CREATE TABLE IF NOT EXISTS `TipoTarifa`(
 `idtipotarifa` INT NOT NULL,
 `desctipotarifa` VARCHAR(45) NOT NULL,
