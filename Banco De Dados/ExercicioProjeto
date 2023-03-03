@@ -77,3 +77,10 @@ INSERT INTO `likes_por_comentario` VALUES
 (1, 7),
 (2, 7),
 (4, 7);
+
+SELECT `P`.`titulo`, (SELECT COUNT(`C`.`id_projeto`) FROM `comentario` `C` WHERE `C`.`id_projeto` = `P`.`id`) AS `Quantidade_Comentarios` FROM `projetos` `P`;
+
+SELECT `P`.`titulo`, (SELECT COUNT(`C`.`id_projeto`) FROM `comentario` `C` WHERE `C`.`id_projeto` = `P`.`id`) AS `Quantidade_Comentarios`,
+ (SELECT COUNT(`LP`.`id_projeto`) FROM `likes_por_projeto` `LP` WHERE `LP`.`id_projeto` = `P`.`id`) AS `Quantidade_likes` FROM `projetos` `P`;
+
+SELECT `P`.`id`, `P`.`titulo`, `P`.`data`  FROM `projetos` `P` WHERE `P`.`id` IN (SELECT `C`.`id_projeto` FROM `comentario` `C` WHERE `P`.`id` = `C`.`id_projeto`);
