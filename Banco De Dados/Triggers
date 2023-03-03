@@ -1,0 +1,92 @@
+CREATE SCHEMA IF NOT EXISTS `Triggers` DEFAULT CHARACTER SET utf8;
+USE `Triggers`;
+
+CREATE TABLE IF NOT EXISTS `Triggers`.`Aluno`(
+`cod` INT NOT NULL AUTO_INCREMENT,
+`nome` VARCHAR(100) NOT NULL,
+`curso` INT NOT NULL,
+`status` INT NOT NULL,
+PRIMARY KEY(`cod`)
+)ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `Triggers`.`Curso`(
+`cod` INT NOT NULL AUTO_INCREMENT,
+`descricao` VARCHAR(200) NOT NULL,
+PRIMARY KEY(`cod`)
+)ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `Triggers`.`Matricula`(
+`cod` INT NOT NULL AUTO_INCREMENT,
+`aluno_cod` INT NOT NULL,
+`curso_cod` INT NOT NULL,
+PRIMARY KEY(`cod`)
+)ENGINE = InnoDB;
+
+INSERT INTO `Curso` VALUES (NULL, "Ciências da Computação"),
+(NULL, "Tecnologia em Análise e Desenvolvimento de Sistemas"),
+(NULL, "Engenharia da Computação"),
+(NULL, "Sistemas de Informação");
+
+SET DELIMITER $$
+
+CREATE TRIGGER tg_matricula
+AFTER INSERT ON Aluno
+	FOR EACH ROW BEGIN
+		INSERT INTO Matricula VALUES (NULL, NEW.cod, NEW.Curso);
+	END;
+    
+SET DELIMITER ;
+    
+INSERT INTO `Aluno` VALUES (NULL, "João Paulo Pimentel", 2, 1);
+SELECT * FROM `Aluno`;
+    
+SELECT * FROM `Matricula`;
+
+INSERT INTO `Aluno` VALUES (NULL, "José da Silva", 4, 1);
+
+CREATE TABLE IF NOT EXISTS `Triggers`.`Alunos_Auditoria`(
+`id` INT NOT NULL AUTO_INCREMENT,
+`cod` INT NOT NULL,
+`nome` VARCHAR(100) NOT NULL,
+`modificado_em` DATETIME DEFAULT NULL,
+`acao` VARCHAR(50) DEFAULT NULL,
+PRIMARY KEY(`id`)
+)ENGINE = InnoDB;
+
+SET DELIMITER $$
+
+CREATE TRIGGER antesDeUpdate_Alunos
+BEFORE UPDATE ON Aluno
+	FOR EACH ROW 
+		BEGIN
+			INSERT INTO Alunos_Auditoria SET acao = 'update', cod = OLD.cod, nome = OLD.nome, modificado_em = NOW();
+	END$$
+    
+SET DELIMITER ;
+
+UPDATE `Aluno` SET `nome` = "José da Silva Pimentel" WHERE `cod` = 1;
+UPDATE `Aluno` SET `nome` = "João Paulo" WHERE `cod` = 2;
+
+SELECT * FROM `Aluno`;
+
+SELECT * FROM `Alunos_Auditoria`;
+
+CREATE TABLE IF NOT EXISTS `Triggers`.`Cursos_Auditoria`(
+`id` INT NOT NULL AUTO_INCREMENT,
+`cod` INT NOT NULL,
+`nome` VARCHAR(100) NOT NULL,
+`modificado_em` DATETIME DEFAULT NULL,
+`acao` VARCHAR(50) DEFAULT NULL,
+PRIMARY KEY(`id`)
+)ENGINE = InnoDB;
+
+SET DELIMITER $$
+
+CREATE TRIGGER antesDeUpdate_Cursos
+BEFORE UPDATE ON Curso
+	FOR EACH ROW 
+		BEGIN
+			INSERT INTO Curso_Auditoria SET acao = 'update', cod = OLD.cod, descricao = OLD.descricao, modificado_em = NOW();
+	END$$
+    
+SET DELIMITER ;
