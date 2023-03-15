@@ -126,3 +126,4 @@ SELECT `e`.`nome`, `t`.`telefone` FROM `empregado` AS `e` LEFT JOIN `telefone` A
 
 SELECT `e`.`nome`, `t`.`telefone` FROM `empregado` AS `e` RIGHT JOIN `telefone` AS `t` ON `e`.`cpf`
 = `t`.`empregado_cpf`;
+
