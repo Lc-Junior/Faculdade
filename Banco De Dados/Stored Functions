@@ -134,3 +134,33 @@ SET DELIMITER ;
 
 SELECT `n`.`aluno_id` AS 'Id_Aluno',
 (SUM(`mostra_media`(`n`.`valor_nota`))) AS 'Media_Aluno_Das_6_Provas' FROM `nota` `n` GROUP BY `n`.`aluno_id`;
+
+DELIMITER $
+CREATE PROCEDURE `arredondamento_nota`()
+BEGIN
+ DECLARE `nota_atual` NUMERIC(15,2);
+ DECLARE `id_aluno`, `id_prova` INT;
+ 
+ DECLARE `cur` CURSOR FOR SELECT `valor_nota`, `aluno_id`, `prova_id` FROM `nota`;
+ 
+ OPEN `cur`;
+ 
+myloop:
+ LOOP
+		
+        FETCH `cur` INTO `nota_atual`, `id_aluno`, `id_prova`;
+        
+        IF (CEIL(`nota_atual`) - `nota_atual`) <= 0.2 THEN
+				UPDATE `nota` SET `valor_nota` = CEIL(`nota_atual`)
+                WHERE `aluno_id` = `id_aluno` AND `prova_id` = `id_prova`;
+		END IF;
+ END LOOP;
+ 
+ CLOSE `cur`;
+ 
+END $
+
+DELIMITER ;
+ 
+ CALL `arredondamento_nota`();
+ SELECT * FROM `nota`;
