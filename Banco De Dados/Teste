@@ -1,0 +1,63 @@
+
+CREATE SCHEMA IF NOT EXISTS `teste2` DEFAULT CHARACTER SET utf8 ;
+USE `teste2` ;
+
+CREATE TABLE IF NOT EXISTS `teste2`.`tb_titulacao` (
+  `id` INT NOT NULL,
+  `descricao` VARCHAR(50),
+  PRIMARY KEY (`id`)
+  )
+ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `teste2`.`tb_instrutor` (
+  `id` INT NOT NULL,
+  `rg` VARCHAR(20) NOT NULL,
+  `nome` VARCHAR(100) NOT NULL,
+  `data_nascimento` DATE  NOT NULL,
+  `titulacao_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+    FOREIGN KEY (`titulacao_id`)
+    REFERENCES `teste2`.`tb_titulacao` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `teste2`.`tb_telefone_instrutor` (
+  `id` INT NOT NULL,
+  `numero` VARCHAR(45) NOT NULL,
+  `tipo` VARCHAR(45) NOT NULL,
+  `instrutor_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+    FOREIGN KEY (`instrutor_id`)
+    REFERENCES `teste2`.`tb_instrutor` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+INSERT IGNORE INTO `tb_titulacao` VALUES (1, 'Graduado'), (2, 'Especialista'), (3, 'Mestrado'), (4, 'Doutorado');
+
+SELECT * FROM tb_titulacao;
+
+INSERT INTO `tb_instrutor` VALUES (1, '1234567', 'Instrutor um de Araújo', '1990-10-15', 2),
+(2, '4321567', 'Instrutor Dois da Silva', '1997-08-12', 1),
+(3, '4545454', 'Instrutor Beltrano Três', '1990-07-02', 3),
+(4, '7677873', 'Instrutor Quatro Atilano', '1989-06-23', 3),
+(5, '3224566', 'Instrutor Cinco Souza', '1992-05-28', 2),
+(6, '1265789', 'Instrutor Souzae Seis', '1993-04-30', 1),
+(7, '1265789', 'Instrutor Souza Sete', '1976-04-30', 4);
+
+INSERT INTO `tb_telefone_instrutor` VALUES (1, '99881013', 'Celular', 1),
+(2, '30302013', 'Fixo', 2),
+(3, '98763010', 'Celular', 3),
+(4, '90304011', 'Celular', 4),
+(5, '99985025', 'Celular', 5),
+(6, '30306036', 'Fixo', 6),
+(7, '99887047', 'Celular', 7);
+
+SELECT `i`. `id`, `i`. `nome`, `tit`.`descricao` FROM `tb_instrutor` `i` INNER JOIN `tb_titulacao` `tit` ON `i`.`titulacao_id` = `tit`. `id`;
+
+SELECT `i`. `id`, `i`. `nome`, `tit`.`descricao`, `t`.`numero` AS `telefone` FROM `tb_instrutor` `i` INNER JOIN `tb_titulacao` `tit` ON `i`.`titulacao_id` = `tit`. `id` 
+INNER JOIN `tb_telefone_instrutor` `t` ON `t`.`instrutor_id` = `i`.`id` GROUP BY `id` ASC; 
+
+SELECT `i`. `id`, `i`.`rg`,`i`. `nome`,`tit`.`descricao`, `t`.`numero` AS `telefone` FROM `tb_instrutor` `i` INNER JOIN `tb_titulacao` `tit` ON `i`.`titulacao_id` = `tit`. `id` 
+INNER JOIN `tb_telefone_instrutor` `t` ON `t`.`instrutor_id` = `i`.`id` GROUP BY `id` ASC;
