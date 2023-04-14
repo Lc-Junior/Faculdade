@@ -88,4 +88,4 @@ BEGIN
 END $$
 DELIMITER :
 
-call `Selecionar_Instrutores`('Turma C');
+call `Selecionar_Instrutores`('Turma A');
