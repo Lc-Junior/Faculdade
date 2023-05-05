@@ -1,0 +1,438 @@
+-- DROP DATABASE `bd_prova_pratica`;
+-------------------------------------------------------
+-- Schema bd_prova_pratica
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `bd_prova_pratica` DEFAULT CHARACTER SET utf8;
+USE `bd_prova_pratica` ;
+
+-- -----------------------------------------------------
+-- Table `bd_prova_pratica`.`tb_titulacao`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `bd_prova_pratica`.`tb_titulacao` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `descricao` VARCHAR(50) NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `bd_prova_pratica`.`tb_instrutor`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `bd_prova_pratica`.`tb_instrutor` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `rg` VARCHAR(20) NULL,
+  `nome` VARCHAR(100) NULL,
+  `data_nascimento` DATE NULL,
+  `titulacao_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_tb_instrutor_tb_titulacao1_idx` (`titulacao_id` ASC),
+  UNIQUE INDEX `rg_UNIQUE` (`rg` ASC),
+  CONSTRAINT `fk_tb_instrutor_tb_titulacao1`
+    FOREIGN KEY (`titulacao_id`)
+    REFERENCES `bd_prova_pratica`.`tb_titulacao` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `bd_prova_pratica`.`tb_telefone_instrutor`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `bd_prova_pratica`.`tb_telefone_instrutor` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `numero` VARCHAR(15) NOT NULL,
+  `tipo` VARCHAR(45) NULL,
+  `instrutor_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_tb_telefone_instrutor_tb_instrutor_idx` (`instrutor_id` ASC),
+  CONSTRAINT `fk_tb_telefone_instrutor_tb_instrutor`
+    FOREIGN KEY (`instrutor_id`)
+    REFERENCES `bd_prova_pratica`.`tb_instrutor` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `bd_prova_pratica`.`tb_atividade`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `bd_prova_pratica`.`tb_atividade` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(100) NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `bd_prova_pratica`.`tb_turma`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `bd_prova_pratica`.`tb_turma` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `horario` TIME NULL,
+  `duracao` INT NULL,
+  `data_inicio` DATE NULL,
+  `data_termino` DATE NULL,
+  `atividade_id` INT NOT NULL,
+  `instrutor_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_tb_turma_tb_atividade1_idx` (`atividade_id` ASC),
+  INDEX `fk_tb_turma_tb_instrutor1_idx` (`instrutor_id` ASC),
+  CONSTRAINT `fk_tb_turma_tb_atividade1`
+    FOREIGN KEY (`atividade_id`)
+    REFERENCES `bd_prova_pratica`.`tb_atividade` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_tb_turma_tb_instrutor1`
+    FOREIGN KEY (`instrutor_id`)
+    REFERENCES `bd_prova_pratica`.`tb_instrutor` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `bd_prova_pratica`.`tb_aluno`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `bd_prova_pratica`.`tb_aluno` (
+  `matricula` INT NOT NULL AUTO_INCREMENT,
+  `turma_id` INT NULL,
+  `nome` VARCHAR(45) NULL,
+  `altura` FLOAT NULL,
+  `peso` INT NULL,
+  `data_nascimento` DATE NULL,
+  `data_matricula` DATE NULL,
+  PRIMARY KEY (`matricula`),
+  INDEX `fk_tb_aluno_tb_turma1_idx` (`turma_id` ASC),
+  CONSTRAINT `fk_tb_aluno_tb_turma1`
+    FOREIGN KEY (`turma_id`)
+    REFERENCES `bd_prova_pratica`.`tb_turma` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `bd_prova_pratica`.`tb_matricula`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `bd_prova_pratica`.`tb_matricula` (
+  `aluno_matricula` INT NOT NULL,
+  `turma_id` INT NOT NULL,
+  PRIMARY KEY (`aluno_matricula`, `turma_id`),
+  INDEX `fk_tb_aluno_has_tb_turma_tb_turma1_idx` (`turma_id` ASC),
+  INDEX `fk_tb_aluno_has_tb_turma_tb_aluno1_idx` (`aluno_matricula` ASC),
+  CONSTRAINT `fk_tb_aluno_has_tb_turma_tb_aluno1`
+    FOREIGN KEY (`aluno_matricula`)
+    REFERENCES `bd_prova_pratica`.`tb_aluno` (`matricula`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_tb_aluno_has_tb_turma_tb_turma1`
+    FOREIGN KEY (`turma_id`)
+    REFERENCES `bd_prova_pratica`.`tb_turma` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `bd_prova_pratica`.`tb_chamada`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `bd_prova_pratica`.`tb_chamada` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `data_chamada` DATE NULL,
+  `aluno_matricula` INT NOT NULL,
+  `turma_id` INT NOT NULL,
+  `presenca` TINYINT(1) NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_tb_chamada_tb_matricula1_idx` (`aluno_matricula` ASC, `turma_id` ASC),
+  CONSTRAINT `fk_tb_chamada_tb_matricula1`
+    FOREIGN KEY (`aluno_matricula` , `turma_id`)
+    REFERENCES `bd_prova_pratica`.`tb_matricula` (`aluno_matricula` , `turma_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+insert into tb_atividade (nome) values ('Musculação');
+insert into tb_atividade (nome) values ('Natação');
+insert into tb_atividade (nome) values ('Spinning');
+insert into tb_atividade (nome) values ('Aero Jump');
+insert into tb_atividade (nome) values ('Capoeira');
+insert into tb_atividade (nome) values ('Ciclismo Indoor');
+insert into tb_atividade (nome) values ('Hidroginástica');
+insert into tb_atividade (nome) values ('Jiu Jitsu');
+insert into tb_atividade (nome) values ('Judo');
+insert into tb_atividade (nome) values ('Krav Maga');
+insert into tb_atividade (nome) values ('Muay Thai');
+insert into tb_atividade (nome) values ('Pilates');
+insert into tb_atividade (nome) values ('Treinamento Funcional');
+insert into tb_atividade (nome) values ('Yoga');
+insert into tb_atividade (nome) values ('Alongamento');
+insert into tb_atividade (nome) values ('Abdominal');
+
+-- select * from tb_atividade; 
+
+insert into tb_titulacao (descricao) values ('Graduado');
+insert into tb_titulacao (descricao) values ('Especialista');
+insert into tb_titulacao (descricao) values ('Mestrado');
+insert into tb_titulacao (descricao) values ('Doutor');
+
+-- select * from tb_titulacao;
+
+insert into tb_instrutor (rg, nome, data_nascimento, titulacao_id) values ('1234567', 'Instrutor Um de Araujo', '1990-10-15', 2);
+insert into tb_instrutor (rg, nome, data_nascimento, titulacao_id) values ('4321567', 'Instrutor Dois da Silva', '1997-08-12', 1);
+insert into tb_instrutor (rg, nome, data_nascimento, titulacao_id) values ('4545454', 'Instrutor Beltrano Três', '1990-07-02', 3);
+insert into tb_instrutor (rg, nome, data_nascimento, titulacao_id) values ('7677873', 'Instrutor Quatro Atilano', '1989-06-23', 3);
+insert into tb_instrutor (rg, nome, data_nascimento, titulacao_id) values ('3224566', 'Instrutor Cinco Souza', '1992-05-28', 2);
+insert into tb_instrutor (rg, nome, data_nascimento, titulacao_id) values ('1265789', 'Instrutor Sousa Seis', '1993-04-30', 1);
+insert into tb_instrutor (rg, nome, data_nascimento, titulacao_id) values ('5325789', 'Instrutor Sete Sete', '1990-03-20', 1);
+insert into tb_instrutor (rg, nome, data_nascimento, titulacao_id) values ('9846345', 'Instrutor Oito Goku', '1988-02-15', 4);
+insert into tb_instrutor (rg, nome, data_nascimento, titulacao_id) values ('4356732', 'Instrutor Oliveira Nove', '1980-01-10', 3);
+insert into tb_instrutor (rg, nome, data_nascimento, titulacao_id) values ('5245725', 'Instrutor Nota Dez', '1970-09-09', 3);
+insert into tb_instrutor (rg, nome, data_nascimento, titulacao_id) values ('6535768', 'Instrutor Neymar Onze', '1980-03-12', 2);
+
+-- select * from tb_instrutor;
+
+insert into tb_telefone_instrutor (numero, tipo, instrutor_id) values ('99881013', 'Celular', 1);
+insert into tb_telefone_instrutor (numero, tipo, instrutor_id) values ('30302013', 'Fixo', 1);
+insert into tb_telefone_instrutor (numero, tipo, instrutor_id) values ('98763010', 'Celular', 2);
+insert into tb_telefone_instrutor (numero, tipo, instrutor_id) values ('90304011', 'Celular', 3);
+insert into tb_telefone_instrutor (numero, tipo, instrutor_id) values ('99985025', 'Celular', 3);
+insert into tb_telefone_instrutor (numero, tipo, instrutor_id) values ('30306036', 'Fixo', 4);
+insert into tb_telefone_instrutor (numero, tipo, instrutor_id) values ('99887047', 'Celular', 5);
+insert into tb_telefone_instrutor (numero, tipo, instrutor_id) values ('30308058', 'Fixo', 6);
+insert into tb_telefone_instrutor (numero, tipo, instrutor_id) values ('99889069', 'Celular', 9);
+insert into tb_telefone_instrutor (numero, tipo, instrutor_id) values ('30301174', 'Fixo', 10);
+insert into tb_telefone_instrutor (numero, tipo, instrutor_id) values ('99881265', 'Celular', 10);
+insert into tb_telefone_instrutor (numero, tipo, instrutor_id) values ('98701356', 'Celular', 10);
+insert into tb_telefone_instrutor (numero, tipo, instrutor_id) values ('99881447', 'Celular', 11);
+insert into tb_telefone_instrutor (numero, tipo, instrutor_id) values ('30301598', 'Fixo', 11);
+
+-- select * from tb_telefone_instrutor;
+
+-- Pilates.
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('08:00', 1, '2017-03-01', '2017-03-31', 12, 1);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('09:00', 1, '2017-03-01', '2017-03-31', 12, 1);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('10:00', 1, '2017-03-01', '2017-03-31', 12, 1);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('11:00', 1, '2017-03-01', '2017-03-31', 12, 1);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('14:00', 1, '2017-03-01', '2017-03-31', 12, 1);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('15:00', 1, '2017-03-01', '2017-03-31', 12, 1);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('16:00', 1, '2017-03-01', '2017-03-31', 12, 1);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('17:00', 1, '2017-03-01', '2017-03-31', 12, 1);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('18:00', 1, '2017-03-01', '2017-03-31', 12, 1);
+-- Musculação.
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('08:00', 2, null, null, 1, 5);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('08:00', 2, null, null, 1, 6);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('08:00', 2, null, null, 1, 7);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('08:00', 2, null, null, 1, 8);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('08:00', 2, null, null, 1, 9);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('08:00', 2, null, null, 1, 10);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('10:00', 2, null, null, 1, 5);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('10:00', 2, null, null, 1, 6);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('10:00', 2, null, null, 1, 7);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('10:00', 2, null, null, 1, 8);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('10:00', 2, null, null, 1, 9);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('10:00', 2, null, null, 1, 10);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('14:00', 2, null, null, 1, 5);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('14:00', 2, null, null, 1, 6);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('14:00', 2, null, null, 1, 7);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('14:00', 2, null, null, 1, 8);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('14:00', 2, null, null, 1, 9);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('14:00', 2, null, null, 1, 10);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('16:00', 2, null, null, 1, 5);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('16:00', 2, null, null, 1, 6);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('16:00', 2, null, null, 1, 7);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('16:00', 2, null, null, 1, 8);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('16:00', 2, null, null, 1, 9);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('16:00', 2, null, null, 1, 10);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('18:00', 2, null, null, 1, 5);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('18:00', 2, null, null, 1, 6);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('18:00', 2, null, null, 1, 7);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('18:00', 2, null, null, 1, 8);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('18:00', 2, null, null, 1, 9);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('18:00', 2, null, null, 1, 10);
+-- Natação.
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('08:00', 1, '2017-01-01', '2017-03-31', 2, 2);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('08:00', 1, '2017-04-01', '2017-06-30', 2, 2);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('08:00', 1, '2017-07-01', '2017-09-30', 2, 2);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('08:00', 1, '2017-10-01', '2017-12-31', 2, 2);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('14:00', 1, null, null, 2, 2);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('17:00', 1, null, null, 2, 2);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('10:00', 2, '2017-01-01', '2017-03-31', 2, 2);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('10:00', 2, '2017-04-01', '2017-06-30', 2, 2);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('10:00', 2, '2017-07-01', '2017-09-30', 2, 2);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('10:00', 2, '2017-10-01', '2017-12-31', 2, 2);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('19:00', 2, null, null, 2, 2);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('21:00', 2, null, null, 2, 2);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('18:00', 1, '2017-01-01', '2017-03-31', 2, 3);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('18:00', 1, '2017-04-01', '2017-06-30', 2, 3);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('18:00', 1, '2017-07-01', '2017-09-30', 2, 3);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('18:00', 1, '2017-10-01', '2017-12-31', 2, 3);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('19:00', 1, null, null, 2, 3);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('19:00', 1, null, null, 2, 3);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('20:00', 2, '2017-01-01', '2017-03-31', 2, 3);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('20:00', 2, '2017-04-01', '2017-06-30', 2, 3);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('20:00', 2, '2017-07-01', '2017-09-30', 2, 3);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('20:00', 2, '2017-10-01', '2017-12-31', 2, 3);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('13:00', 2, null, null, 2, 3);
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('15:00', 2, null, null, 2, 3);
+-- Jiu Jitsu.
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('20:00', 2, '2017-01-01', '2017-12-31', 8, 4);
+-- Krav Maga.
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('10:00', 2, '2017-01-01', '2017-12-31', 10, 4);
+-- Treinamento Funcional.
+insert into tb_turma (horario, duracao, data_inicio, data_termino, atividade_id, instrutor_id) values ('20:00', 2, null, null, 13, 8);
+
+-- select * from tb_turma where atividade_id = 1;
+
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (1, 'Aluno Um', 1.76, 80, '2000-10-15', '2017-02-01');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (null, 'Aluno Dois', 1.80, 90, '1991-3-12', '2017-1-12');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (null, 'Aluno Três', 1.81, 84, '1993-5-14', '2017-1-14');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (null, 'Aluno Quatro', 1.82, 88, '1995-7-16', '2017-1-16');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (null, 'Aluno Cinco', 1.83, 82, '1997-9-18', '2017-1-18');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (12, 'Aluno Seis', 1.84, 89, '1999-11-20', '2017-1-20');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (null, 'Aluno Sete', 1.85, 86, '2001-2-22', '2017-1-22');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (null, 'Aluno Oito', 1.70, 74, '1985-4-24', '2017-1-24');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (null, 'Aluno Nove', 1.71, 78, '1987-6-26', '2017-1-26');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (10, 'Aluno Dez', 1.72, 72, '1989-8-28', '2017-1-28');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (null, 'Aluno Onze', 1.73, 79, '1991-10-30', '2017-2-28');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (null, 'Aluno Doze', 1.74, 83, '1993-12-1', '2017-2-1');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (null, 'Aluno Treze', 1.75, 78, '1995-5-3', '2017-2-3');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (null, 'Aluno Catorze', 1.76, 87, '1997-7-5', '2017-2-5');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (null, 'Aluno Quinze', 1.77, 73, '1999-9-7', '2017-2-7');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (17, 'Aluno Dezesseis', 1.78, 78, '1993-9-9', '2017-1-9');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (null, 'Aluno Dezessete', 1.79, 87, '1995-11-11', '2017-2-11');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (null, 'Aluno Dezoito', 1.80, 76, '1997-2-13', '2017-2-13');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (null, 'Aluno Dezenove', 1.63, 69, '1999-4-15', '2017-2-15');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (null, 'Aluno Vinte', 1.64, 71, '1988-9-17', '2017-2-17');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (null, 'Aluno Vinte e Um', 1.65, 70, '1986-11-2', '2017-2-2');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (null, 'Aluno Vinte e Dois', 1.66, 74, '1984-2-4', '2017-3-4');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (null, 'Aluno Vinte e Três', 1.67, 70, '1982-4-6', '2017-3-6');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (34, 'Aluno Vinte e Quatro', 1.68, 77, '1980-10-8', '2017-1-8');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (null, 'Aluno Vinte e Cinco', 1.69, 78, '1978-12-10', '2017-3-10');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (null, 'Aluno Vinte e Seis', 1.70, 77, '1976-5-12', '2017-3-12');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (null, 'Aluno Vinte e Sete', 1.71, 78, '1974-7-14', '2017-3-14');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (null, 'Aluno Vinte e Oito', 1.72, 74, '1993-9-16', '2017-3-16');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (29, 'Aluno Vinte e Nove', 1.73, 77, '1978-10-18', '2017-1-18');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (null, 'Aluno Trinta', 1.74, 73, '1976-12-20', '2017-3-20');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (null, 'Aluno Trinta e Um', 1.75, 78, '1974-5-22', '2017-3-22');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (null, 'Aluno Trinta e Dois', 1.76, 76, '1993-7-7', '2017-3-7');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (null, 'Aluno Trinta e Três', 1.77, 78, '1995-9-9', '2017-3-9');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (null, 'Aluno Trinta e Quatro', 1.78, 87, '1997-9-11', '2017-3-11');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (21, 'Aluno Trinta e Cinco', 1.79, 76, '1999-11-13', '2017-1-13');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (null, 'Aluno Trinta e Seis', 1.80, 78, '2001-2-15', '2017-3-15');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (null, 'Aluno Trinta e Sete', 1.73, 87, '1985-4-17', '2017-3-17');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (null, 'Aluno Trinta e Oito', 1.74, 76, '1987-10-19', '2017-3-19');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (null, 'Aluno Trinta e Nove', 1.75, 78, '1996-11-21', '2017-3-21');
+insert into tb_aluno (turma_id, nome, altura, peso, data_nascimento, data_matricula) values (null, 'Aluno Quarenta', 1.76, 87, '1998-2-23', '2017-3-23');
+
+-- select * from tb_aluno;
+
+insert into tb_matricula (aluno_matricula, turma_id) values (1,1);
+insert into tb_matricula (aluno_matricula, turma_id) values (2,1);
+insert into tb_matricula (aluno_matricula, turma_id) values (3,1);
+insert into tb_matricula (aluno_matricula, turma_id) values (4,1);
+insert into tb_matricula (aluno_matricula, turma_id) values (5,12);
+insert into tb_matricula (aluno_matricula, turma_id) values (6,12);
+insert into tb_matricula (aluno_matricula, turma_id) values (7,66);
+insert into tb_matricula (aluno_matricula, turma_id) values (8,66);
+insert into tb_matricula (aluno_matricula, turma_id) values (9,2);
+insert into tb_matricula (aluno_matricula, turma_id) values (10,2);
+insert into tb_matricula (aluno_matricula, turma_id) values (11,17);
+insert into tb_matricula (aluno_matricula, turma_id) values (12,17);
+insert into tb_matricula (aluno_matricula, turma_id) values (13,17);
+insert into tb_matricula (aluno_matricula, turma_id) values (14,17);
+insert into tb_matricula (aluno_matricula, turma_id) values (15,3);
+insert into tb_matricula (aluno_matricula, turma_id) values (16,3);
+insert into tb_matricula (aluno_matricula, turma_id) values (17,17);
+insert into tb_matricula (aluno_matricula, turma_id) values (18,34);
+insert into tb_matricula (aluno_matricula, turma_id) values (19,34);
+insert into tb_matricula (aluno_matricula, turma_id) values (20,34);
+insert into tb_matricula (aluno_matricula, turma_id) values (21,66);
+insert into tb_matricula (aluno_matricula, turma_id) values (22,34);
+insert into tb_matricula (aluno_matricula, turma_id) values (23,34);
+insert into tb_matricula (aluno_matricula, turma_id) values (24,13);
+insert into tb_matricula (aluno_matricula, turma_id) values (25,46);
+insert into tb_matricula (aluno_matricula, turma_id) values (26,46);
+insert into tb_matricula (aluno_matricula, turma_id) values (27,47);
+insert into tb_matricula (aluno_matricula, turma_id) values (28,47);
+insert into tb_matricula (aluno_matricula, turma_id) values (29,29);
+insert into tb_matricula (aluno_matricula, turma_id) values (30,29);
+insert into tb_matricula (aluno_matricula, turma_id) values (31,29);
+insert into tb_matricula (aluno_matricula, turma_id) values (32,64);
+insert into tb_matricula (aluno_matricula, turma_id) values (33,29);
+insert into tb_matricula (aluno_matricula, turma_id) values (34,21);
+insert into tb_matricula (aluno_matricula, turma_id) values (35,21);
+insert into tb_matricula (aluno_matricula, turma_id) values (36,21);
+insert into tb_matricula (aluno_matricula, turma_id) values (37,64);
+insert into tb_matricula (aluno_matricula, turma_id) values (38,64);
+insert into tb_matricula (aluno_matricula, turma_id) values (39,65);
+insert into tb_matricula (aluno_matricula, turma_id) values (40,65);
+
+-- select * from tb_matricula;
+
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-3-01', 1, 1, true);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-3-02', 1, 1, false);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12', 1, 1, true);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',2,1,true);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',3,1,true);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',4,1,true);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',5,12,true);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',6,12,true);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',7,66,false);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',8,66,true);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',9,2,true);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',10,2,true);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',11,17,true);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',12,17,true);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',13,17,true);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',14,17,false);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',15,3,false);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',16,3,true);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',17,17,true);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',18,34,true);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',19,34,true);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',20,34,true);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',21,66,true);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',22,34,true);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',23,34,true);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',24,13,true);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',25,46,false);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',26,46,true);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',27,47,true);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',28,47,true);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',29,29,true);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',30,29,true);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',31,29,true);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',32,64,true);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',33,29,true);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',34,21,true);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',35,21,true);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',36,21,false);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',37,64,true);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',38,64,true);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',39,65,true);
+insert into tb_chamada (data_chamada, aluno_matricula, turma_id, presenca) values ('2017-4-12',40,65,true);
+
+-- select * from tb_aluno;
+
+SELECT a.nome AS Nome, a.data_nascimento AS 'Data Nascimento' FROM tb_aluno a 
+INNER JOIN tb_matricula m on m.aluno_matricula = a.matricula 
+where m.turma_id in( select t.id from tb_turma t 
+inner join tb_instrutor i on t.instrutor_id = i.id where lower(i.nome) like '%goku%') order by a.data_nascimento;
+
+SELECT a.nome AS Nome, at.nome AS Modalidade, a.data_nascimento AS 'Data Nascimento' FROM tb_aluno a
+INNER JOIN tb_matricula m on m.aluno_matricula = a.matricula
+INNER JOIN tb_turma t on m.turma_id = t.id
+INNER JOIN tb_atividade at  on t.atividade_id = at.id
+where m.turma_id in( select t.id from tb_turma t 
+inner join tb_instrutor i on t.instrutor_id = i.id where lower(i.nome) like '%goku%') order by a.data_nascimento;
+
+SELECT a.nome AS Nome, at.nome AS Modalidade, a.data_nascimento AS 'Data Nascimento' FROM tb_aluno a
+INNER JOIN tb_matricula m on m.aluno_matricula = a.matricula
+INNER JOIN tb_turma t on m.turma_id = t.id
+INNER JOIN tb_atividade at  on t.atividade_id = at.id
+where t.instrutor_id = ( select id from tb_instrutor i where lower(i.nome) like '%goku%') order by a.data_nascimento;
+
+SELECT a.nome as 'Modalidade', t.horario AS 'Horario', count(m.aluno_matricula) AS 'Qtd alunos presentes' FROM tb_atividade a 
+INNER JOIN tb_turma t on a.id = t.atividade_id INNER JOIN tb_matricula m on t.id = m.turma_id WHERE m.aluno_matricula
+IN (SELECT aluno_matricula FROM tb_chamada WHERE data_chamada = '2017-04-12' and presenca) GROUP BY a.nome, t.horario;
