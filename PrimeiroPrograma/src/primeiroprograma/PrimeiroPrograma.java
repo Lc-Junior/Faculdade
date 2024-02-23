@@ -21,7 +21,7 @@ public class PrimeiroPrograma {
         media = (nota1+nota2+nota3)/3;
         System.out.println("Media das notas foi: "+media);
         if(media >= 6){
-            System.out.println("Você foi aprovado!");
+            System.out.println("Parabéns! Você foi aprovado!");
             }
         else{
             System.out.println("Você foi reprovado!");
