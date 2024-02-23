@@ -16,25 +16,48 @@ public class Exemplo2IMC {
         //imc = IMC(peso, altura);
         
         System.out.printf("===============================\n");
+        System.out.printf("\nValor do IMC: %.2f" + IMC(peso, altura));
+        System.out.printf("\nValor do IMC: %.2f" + resultadoIMC(imc));
+        
         if(imc < 20){
             System.out.printf("IMC = %.2f (Magro!)", imc);
         }
-        if(imc >= 20 && imc < 24){
+        else if(imc >= 20 && imc < 24){
             System.out.printf("IMC = %.2f (Normal!)", imc);
         }
-        if(imc >= 24 && imc < 29){
+        else if(imc >= 24 && imc < 29){
             System.out.printf("IMC = %.2f (Acima do peso!)", imc);
         }
-        if(imc >= 29 && imc < 34){
+        else if(imc >= 29 && imc < 34){
             System.out.printf("IMC = %.2f (Obeso!)", imc);
         }
-        if(imc >= 34){
+        else if(imc >= 34){
             System.out.printf("IMC = %.2f (Muito obeso!)", imc);
         }
         System.out.printf("\n===============================");
     }
-    //public static float IMC(float peso, float altura){
-    //    return (peso/ (altura*altura));
-    //}
     
+    
+    
+    
+    
+    public static float IMC(float peso, float altura){
+        return (peso/ (altura*altura));
+    }
+    
+    public static String resultadoIMC(float imc){
+        if(imc < 20){
+            return("Magro!");
+        }
+        else if(imc >= 20 && imc < 24){
+            return("Normal!");
+        }
+        else if(imc >= 24 && imc < 29){
+            return("Acima do peso!");
+        }
+        else if(imc >= 29 && imc < 34){
+            return("Obeso!");
+        }
+        else return("Muito obeso!");
+    }
 }
