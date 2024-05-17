@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
+import java.sql.Scanner;
 
 
 public class BancoJDBC {
@@ -31,11 +32,10 @@ public class BancoJDBC {
         }catch(SQLException e){
         System.out.println("Error: "+ e.getMessage());
         }
-        inserirRegistros();
+        inserirRegistros2(0, url, url, url);
         listarRegistros();
-        
 }
-    
+/*    
     private void inserirRegistros() {
         try{
             stmt.executeUpdate("INSERT INTO Empregado VALUES" +  "(2, 'Luis', '6291376124', '6580.00')");
@@ -43,7 +43,7 @@ public class BancoJDBC {
             System.out.println("Erro: " + e.getMessage());
         }
     }
-
+*/
     private void listarRegistros() {
         try{
             ResultSet rs;
@@ -64,6 +64,30 @@ public class BancoJDBC {
     public static void main(String[] args) {
         BancoJDBC bancoJDBC = new BancoJDBC();
     }
+    
+    private void inserirRegistros2(int mat, String n, String tel, String sal){
+        try{
+            stmt.executeUpdate("INSERT INTO Empregado VALUES("+mat+",'"+n+"','"+tel+"','"+sal+"')");
+            }catch(SQLException e){
+                System.out.println("Erro: "+ e.getMessage());
+            }
+    }
+    
+    private void alterarRegistros(String sal, int mat){
+        try{
+            stmt.executeUpdate("UPDATE Empregado SET salario= '"+sal+"' WHERE matricula="+mat+"");
+        }catch(SQLException e){
+            System.out.println("Erro: "+ e.getMessage());
+        }
+    }
+    
+    private void apagarRegistros(int mat){
+        try{
+            stmt.executeUpdate("DELETE FROM Empregado WHERE matricula="+mat+"");
+        }catch(SQLException e){
+                System.out.println("Erro: "+ e.getMessage());
+        }
+}
 }
 
 
